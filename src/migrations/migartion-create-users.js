@@ -27,7 +27,7 @@ module.exports = {
       gender: {
         type: Sequelize.BOOLEAN,
       },
-      rolweId: {
+      roleId: {
         type: Sequelize.STRING,
       },
       phoneNumber: {
