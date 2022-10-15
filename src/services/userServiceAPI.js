@@ -104,19 +104,19 @@ let createNewUser = (data) => {
           errCode: 1,
           errMessage: "Your email already exists, Plz try another email!!",
         });
+      } else {
+        let hasdUserPasswordFromBcrypt = await hashUserPassword(data.password);
+        await db.User.create({
+          email: data.email,
+          password: hasdUserPasswordFromBcrypt,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          address: data.address,
+          gender: data.gender === "1" ? true : false,
+          roleId: data.roleId,
+          phoneNumber: data.phoneNumber,
+        });
       }
-
-      let hasdUserPasswordFromBcrypt = await hashUserPassword(data.password);
-      await db.User.create({
-        email: data.email,
-        password: hasdUserPasswordFromBcrypt,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        address: data.address,
-        gender: data.gender === "1" ? true : false,
-        roleId: data.roleId,
-        phoneNumber: data.phoneNumber,
-      });
       resolve({
         errCode: 0,
         message: "ok",
@@ -187,10 +187,34 @@ let updateUserInfo = (data) => {
   });
 };
 
+let getAllCodeService = (typeInput) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!typeInput) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameters!!!",
+        });
+      } else {
+        let res = {};
+        let getAllCode = await db.Allcodes.findAll({
+          where: { type: typeInput },
+        });
+        res.errCode = 0;
+        res.data = getAllCode;
+        resolve(res);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin,
   getAllUsers,
   createNewUser,
   deleteUserbyId,
   updateUserInfo,
+  getAllCodeService,
 };

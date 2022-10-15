@@ -31,6 +31,8 @@ const initWebRouter = (app) => {
 
   router.delete("/api/delete-user", userController.handleDeleteUsers);
 
+  // router.get("/allcode", userController.handleGetAllCode);
+
   return app.use("/", router);
 };
 
